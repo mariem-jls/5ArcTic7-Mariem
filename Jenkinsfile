@@ -59,11 +59,11 @@ pipeline {
                 dir('backend') {
                     withSonarQubeEnv('SonarQube') {
                         sh """
-                            mvn sonar:sonar \
+                            mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
                                 -Dsonar.projectKey=devops-appgestionprojets \
                                 -Dsonar.projectName="DevOps AppGestionProjets" \
                                 -Dsonar.host.url=${SONAR_HOST} \
-                                -Dsonar.login=${SONAR_TOKEN}
+                                -Dsonar.token=${SONAR_TOKEN}
                         """
                     }
                 }
