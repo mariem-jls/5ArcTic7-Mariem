@@ -110,25 +110,44 @@ pipeline {
         // ==========================================
         // STAGE 6 : Maven Deploy -DskipTests
         // ==========================================
-        stage('6. Maven Deploy (Skip Tests)') {
-            steps {
-                echo "=== Stage 6 : Déploiement du .jar vers Nexus ==="
-                dir('backend') {
-                    withCredentials([usernamePassword(
-                        credentialsId: 'nexus-credentials',
-                        usernameVariable: 'NEXUS_USER',
-                        passwordVariable: 'NEXUS_PASS'
-                    )]) {
-                        sh """
-                            mvn deploy -DskipTests \
-                                -Dnexus.username=${NEXUS_USER} \
-                                -Dnexus.password=${NEXUS_PASS}
-                        """
-                    }
-                }
+		stage('6. Maven Deploy (Skip Tests)') {
+    steps {
+        echo "=== Stage 6 : Déploiement du .jar vers Nexus ==="
+        dir('backend') {
+            withCredentials([usernamePassword(
+                credentialsId: 'nexus-credentials',
+                usernameVariable: 'NEXUS_USER',
+                passwordVariable: 'NEXUS_PASS'
+            )]) {
+                sh '''
+                    # Créer un settings.xml temporaire
+                    cat > /tmp/settings.xml << EOF
+<settings>
+  <servers>
+    <server>
+      <id>nexus-releases</id>
+      <username>$NEXUS_USER</username>
+      <password>$NEXUS_PASS</password>
+    </server>
+    <server>
+      <id>nexus-snapshots</id>
+      <username>$NEXUS_USER</username>
+      <password>$NEXUS_PASS</password>
+    </server>
+  </servers>
+</settings>
+EOF
+
+                    
+                    mvn deploy -DskipTests -s /tmp/settings.xml
+                    
+                    
+                    rm -f /tmp/settings.xml
+                '''
             }
         }
-
+    }
+}
         // ==========================================
         // STAGE 7 : Build & Push Backend Docker
         // ==========================================
