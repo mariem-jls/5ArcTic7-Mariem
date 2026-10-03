@@ -53,22 +53,24 @@ pipeline {
         // ==========================================
         // STAGE 3 : SonarQube Analysis
         // ==========================================
-        stage('3. SonarQube Analysis') {
-    tools {
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
-    }
+	stage('3. SonarQube Analysis') {
     steps {
         echo "=== Stage 3 : Analyse qualité du code avec SonarQube ==="
         dir('backend') {
             withSonarQubeEnv('SonarQube') {
-                sh """
+                sh '''
+                    export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+                    export PATH=$JAVA_HOME/bin:$PATH
+                    
+                    echo "=== Version Java utilisée ==="
+                    java -version
+                    
                     mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
                         -Dsonar.projectKey=devops-appgestionprojets \
                         -Dsonar.projectName="DevOps AppGestionProjets" \
-                        -Dsonar.host.url=${SONAR_HOST} \
-                        -Dsonar.token=${SONAR_TOKEN}
-                """
+                        -Dsonar.host.url=$SONAR_HOST \
+                        -Dsonar.token=$SONAR_TOKEN
+                '''
             }
         }
     }
