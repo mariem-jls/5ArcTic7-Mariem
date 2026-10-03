@@ -32,7 +32,7 @@ pipeline {
         stage('1. Get Code from Git') {
             steps {
                 echo "=== Stage 1 : Récupération du code depuis GitHub ==="
-                git branch: 'main',
+                git branch: 'master',
                     credentialsId: 'github-credentials',
                     url: 'https://github.com/mariem-jls/5ArcTic7-Mariem.git'
             }
