@@ -4,7 +4,7 @@ pipeline {
     tools {
         jdk 'JDK17'
         maven 'M2_HOME'
-        nodejs 'NodeJS20'
+        nodejs 'NodeJS'
     }
 
     environment {
