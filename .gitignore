@@ -1,0 +1,23 @@
+# Maven
+backend/target/
+*.jar
+*.war
+
+# Node/Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+settings.xml
+*.pem
+.env
