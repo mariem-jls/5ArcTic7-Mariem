@@ -54,21 +54,24 @@ pipeline {
         // STAGE 3 : SonarQube Analysis
         // ==========================================
         stage('3. SonarQube Analysis') {
-            steps {
-                echo "=== Stage 3 : Analyse qualité du code avec SonarQube ==="
-                dir('backend') {
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                            mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
-                                -Dsonar.projectKey=devops-appgestionprojets \
-                                -Dsonar.projectName="DevOps AppGestionProjets" \
-                                -Dsonar.host.url=${SONAR_HOST} \
-                                -Dsonar.token=${SONAR_TOKEN}
-                        """
-                    }
+    steps {
+        echo "=== Stage 3 : Analyse qualité du code avec SonarQube ==="
+        dir('backend') {
+            // Utiliser Java 21 UNIQUEMENT pour SonarScanner
+            withEnv(['JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64', 'PATH+JAVA21=/usr/lib/jvm/java-21-openjdk-amd64/bin']) {
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
+                            -Dsonar.projectKey=devops-appgestionprojets \
+                            -Dsonar.projectName="DevOps AppGestionProjets" \
+                            -Dsonar.host.url=${SONAR_HOST} \
+                            -Dsonar.token=${SONAR_TOKEN}
+                    """
                 }
             }
         }
+    }
+}
 
         // ==========================================
         // STAGE 4 : Maven Test (3 méthodes minimum)
