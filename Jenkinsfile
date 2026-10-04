@@ -215,13 +215,13 @@ EOF
                 sh '''
                     # Arrêter et nettoyer les conteneurs existants
                     docker stop spring-backend 2>/dev/null || true
-                    docker stop mysql-db 2>/dev/null || true
+                    docker stop mysql-db angular-frontend 2>/dev/null || true
                     docker rm spring-backend 2>/dev/null || true
-                    docker rm mysql-db 2>/dev/null || true
+                    docker rm mysql-db angular-frontend 2>/dev/null || true
                     
-                    # Lancer docker-compose
-                    docker-compose down || true
-                    docker-compose up -d
+                    # Lancer docker compose
+                    docker compose down || true
+                    docker compose up -d
                     
                     # Attendre que les services démarrent
                     sleep 15
