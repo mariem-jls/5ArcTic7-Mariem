@@ -1,5 +1,5 @@
 # ============ ÉTAPE 1 : BUILD ============
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copier pom.xml et télécharger les dépendances
@@ -11,7 +11,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ============ ÉTAPE 2 : RUNTIME ============
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Copier le .jar depuis l'étape de build
